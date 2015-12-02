@@ -1,5 +1,8 @@
 package introsde.document.ws;
+import introsde.document.model.Measure;
 import introsde.document.model.Person;
+import introsde.document.wrapper.HealthHistoryWrapper;
+import introsde.document.wrapper.MeasureTypesWrapper;
 import introsde.document.wrapper.PeopleWrapper;
 
 import java.text.ParseException;
@@ -37,6 +40,17 @@ public interface People {
     @WebResult(name="message") 
     public String deletePerson(@WebParam(name="personId") Long id);
 
+    @WebMethod(operationName="readPersonHistory")
+    @WebResult(name="healthProfile-history")
+    public HealthHistoryWrapper getPersonHistory(@WebParam(name="personId") Long id, @WebParam(name="measureType") String measureType);
+    
+    @WebMethod(operationName="readMeasureTypes")
+    @WebResult(name="measureTypes")
+    public MeasureTypesWrapper getMeasureTypes();
+    
+    @WebMethod(operationName="readPersonMeasure")
+    @WebResult(name="measure")
+    public String getPersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measureType") String measureType, @WebParam(name="mid") Long idMeasure);
     //@WebMethod(operationName="updatePersonHealthProfile")
     //@WebResult(name="hpId") 
     //public int updatePersonHP(@WebParam(name="personId") int id, @WebParam(name="healthProfile") LifeStatus hp);
