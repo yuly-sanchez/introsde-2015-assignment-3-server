@@ -18,11 +18,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class HealthHistoryWrapper{
 	
 	@XmlElement(name="measure")
-	public List<Measure> healthHistoryList = null;
+	public List<Measure> healthHistoryList;
 
-	public List<Measure> getHealthHistoryList() {
+	/*public List<Measure> getHealthHistoryList() {
 		return healthHistoryList;
-	}
+	}*/
 
 	public void setHealthHistoryList(List<Measure> healthHistoryList) {
 		this.healthHistoryList = new ArrayList<Measure>();
