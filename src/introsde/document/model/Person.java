@@ -21,8 +21,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @Entity  
-@Table(name="Person")  
-@NamedQuery(name="Person.findAll", query="SELECT p FROM Person p")
+@Table(name="Person")
+@NamedQueries({
+	@NamedQuery(name="Person.findAll", query="SELECT p FROM Person p"),
+	@NamedQuery(name="Person.currentHealth", query="SELECT m FROM Measure m WHERE m.dateRegistered IN (SELECT MAX(h.dateRegistered) FROM Measure h WHERE h.person = ?1 GROUP BY h.measureType)")
+	
+	//@NamedQuery(name="Person.currentHealth" , query="SELECT m FROM Measure m WHERE m.person = ?1 GROUP BY m.measureType HAVING m.dateRegistered = MAX(m.dateRegistered)")
+	//SELECT * FROM Measure m WHERE m.dateRegistered IN (SELECT MAX(h.dateRegistered) FROM Measure h GROUP BY h.measureType) 
+})
+
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement
 public class Person implements Serializable {
@@ -82,7 +89,8 @@ public class Person implements Serializable {
 	@XmlElementWrapper(name="currentHealth")
 	@XmlElement(name="measure")
 	public List<Measure> getCurrentHealth() {
-		return currentHealth;
+		//return currentHealth;
+		return this.getCurrentMeasure();
 	}
 
 	public List<Measure> getHealthHistory() {
@@ -165,4 +173,14 @@ public class Person implements Serializable {
         tx.commit();
         LifeCoachDao.instance.closeConnections(em);
     }
+    
+    public List<Measure> getCurrentMeasure() {
+		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        //em.getEntityManagerFactory().getCache().evictAll();
+        List<Measure> list = em.createNamedQuery("Person.currentHealth", Measure.class)
+        		.setParameter(1, this)
+        		.getResultList();
+        LifeCoachDao.instance.closeConnections(em);
+        return list;
+	}
 }
