@@ -16,11 +16,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class MeasureTypesWrapper{
 
 	@XmlElement(name="measureType")
-	private List<String> measureTypeList = null;
+	private List<String> measureTypeList;
 
-	public List<String> getMeasureTypeList() {
+	/*public List<String> getMeasureTypeList() {
 		return measureTypeList;
-	}
+	}*/
 
 	public void setMeasureTypeList(List<String> measureTypeList) {
 		this.measureTypeList = new ArrayList<String>();
