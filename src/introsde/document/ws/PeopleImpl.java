@@ -1,11 +1,17 @@
 package introsde.document.ws;
 import introsde.document.dao.LifeCoachDao;
+import introsde.document.model.Measure;
 import introsde.document.model.Person;
+import introsde.document.wrapper.HealthHistoryWrapper;
+import introsde.document.wrapper.MeasureTypesWrapper;
 import introsde.document.wrapper.PeopleWrapper;
 
 import java.text.ParseException;
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.persistence.EntityTransaction;
 
@@ -120,6 +126,43 @@ public class PeopleImpl implements People {
 		}
     }
 
+	@Override
+	public HealthHistoryWrapper getPersonHistory(Long id, String measureType) {
+		System.out.println("--> REQUEST: getPersonHistory("+ id + " , " + measureType + ")");
+    	
+		Person target = Person.getPersonById(id);
+    	List<Measure> measureHistory = Measure.getByPersonMeasure(target, measureType);
+    	for(Measure m : measureHistory){
+    		System.out.println(m.toString());
+    	}
+    	HealthHistoryWrapper hw = new HealthHistoryWrapper();
+    	hw.setHealthHistoryList(measureHistory);
+		return hw;
+	}
+
+	@Override
+	@WebMethod(operationName="readMeasureTypes")
+    @WebResult(name="measureTypes")
+    public MeasureTypesWrapper getMeasureTypes(){
+		System.out.println("--> REQUEST: getMeasureTypes()");
+		
+		List<String> measureTypes = Measure.getByMeasureTypes();
+		for(String m : measureTypes){
+			System.out.println(m.toString());
+		}
+		MeasureTypesWrapper mw = new MeasureTypesWrapper();
+		mw.setMeasureTypeList(measureTypes);
+		return mw;
+	}
+	
+	@Override
+	public String getPersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measureType") String measureType, @WebParam(name="mid") Long idMeasure){
+		System.out.println("--> REQUEST: getPersonMeasure("+ idPerson + " , " + measureType + " , " + idMeasure + ")");
+		
+		Person target = Person.getPersonById(idPerson);
+		Measure measure = Measure.getByPersonMid(target, measureType, idMeasure);
+		return measure.getMeasureValue();
+	}
    /* @Override
     public int updatePersonHP(int id, LifeStatus hp) {
         LifeStatus ls = LifeStatus.getLifeStatusById(hp.getIdMeasure());
