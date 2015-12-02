@@ -17,8 +17,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="people")
 public class PeopleWrapper {
 	
+	private List<Person> peopleList;
+
 	@XmlElement(name="person")
-	private List<Person> peopleList = null;
+	public List<Person> getPeopleList() {
+		return peopleList;
+	}
 
 	public void setPeopleList(List<Person> peopleList) {
 		this.peopleList = new ArrayList<Person>();
