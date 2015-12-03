@@ -5,7 +5,11 @@ import java.net.URISyntaxException;
 import java.io.IOException;
 
 import javax.xml.ws.Endpoint;
-
+/**
+ * Web Service Endpoint Publisher
+ * @author yuly
+ *
+ */
 public class PeoplePublisher {
 	
     public static void main(String[] args) throws IllegalArgumentException, IOException, URISyntaxException{
@@ -24,6 +28,7 @@ public class PeoplePublisher {
         String endpointUrl = PROTOCOL + HOSTNAME + ":" + PORT + BASE_URL;
         System.out.println("Starting People Service...");
         System.out.println("--> Published. Check out " + endpointUrl + "?wsdl");
+        
         Endpoint.publish(endpointUrl, new PeopleImpl());
     }
 }
