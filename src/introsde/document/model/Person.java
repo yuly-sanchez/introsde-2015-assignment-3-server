@@ -20,7 +20,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-@Entity  
+@Entity
+@Cacheable(false)
 @Table(name="Person")
 @NamedQueries({
 	@NamedQuery(name="Person.findAll", query="SELECT p FROM Person p"),
@@ -63,8 +64,8 @@ public class Person implements Serializable {
     @OneToMany(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	public List<Measure> currentHealth;
 	
-	@OneToMany(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private List<Measure> healthHistory;
+	//@OneToMany(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	//private List<Measure> healthHistory;
 	
 	// Getters
 	public Long getIdPerson() {
@@ -89,13 +90,16 @@ public class Person implements Serializable {
 	@XmlElementWrapper(name="currentHealth")
 	@XmlElement(name="measure")
 	public List<Measure> getCurrentHealth() {
-		//return currentHealth;
 		return this.getCurrentMeasure();
 	}
 
-	public List<Measure> getHealthHistory() {
-		return healthHistory;
+	public List<Measure> getCurrentHealthMeasure() {
+		return currentHealth;
 	}
+	
+	/*public List<Measure> getHealthHistory() {
+		return healthHistory;
+	}*/
 
 	// Setters
 	public void setIdPerson(Long idPerson) {
@@ -121,9 +125,9 @@ public class Person implements Serializable {
 		this.currentHealth = currentHealth;
 	}
 
-	public void setHealthHistory(List<Measure> healthHistory) {
+	/*public void setHealthHistory(List<Measure> healthHistory) {
 		this.healthHistory = healthHistory;
-	}
+	}*/
 
 	public String toString(){
 		return "Person ( " + idPerson + " " + firstname + " " + lastname + " " + birthdate + " )";
@@ -132,6 +136,7 @@ public class Person implements Serializable {
 	// database operations
     public static Person getPersonById(Long personId) {
         EntityManager em = LifeCoachDao.instance.createEntityManager();
+        //em.getEntityManagerFactory().getCache().evictAll();
         Person p = em.find(Person.class, personId);
         LifeCoachDao.instance.closeConnections(em);
         return p;
@@ -139,6 +144,7 @@ public class Person implements Serializable {
 
     public static List<Person> getAll() {
         EntityManager em = LifeCoachDao.instance.createEntityManager();
+        //em.getEntityManagerFactory().getCache().evictAll();
         List<Person> list = em.createNamedQuery("Person.findAll", Person.class).getResultList();
         LifeCoachDao.instance.closeConnections(em);
         return list;
@@ -176,11 +182,11 @@ public class Person implements Serializable {
     
     public List<Measure> getCurrentMeasure() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-        //em.getEntityManagerFactory().getCache().evictAll();
         List<Measure> list = em.createNamedQuery("Person.currentHealth", Measure.class)
         		.setParameter(1, this)
         		.getResultList();
         LifeCoachDao.instance.closeConnections(em);
         return list;
 	}
+    
 }
