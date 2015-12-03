@@ -1,4 +1,6 @@
+
 package introsde.document.ws;
+
 import introsde.document.model.Measure;
 import introsde.document.model.Person;
 import introsde.document.wrapper.HealthHistoryWrapper;
@@ -15,7 +17,11 @@ import javax.jws.WebResult;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
-
+/**
+ * Web Service Endpoint Interface
+ * @author yuly
+ *
+ */
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use=Use.LITERAL)
 public interface People {
@@ -51,6 +57,15 @@ public interface People {
     @WebMethod(operationName="readPersonMeasure")
     @WebResult(name="measure")
     public String getPersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measureType") String measureType, @WebParam(name="mid") Long idMeasure);
+    
+    @WebMethod(operationName="savePersonMeasure")
+    @WebResult(name="measure")
+    public Measure savePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure);
+    
+    @WebMethod(operationName="updatePersonMeasure")
+    @WebResult(name="measure")
+    public Measure updatePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure);
+    
     //@WebMethod(operationName="updatePersonHealthProfile")
     //@WebResult(name="hpId") 
     //public int updatePersonHP(@WebParam(name="personId") int id, @WebParam(name="healthProfile") LifeStatus hp);
