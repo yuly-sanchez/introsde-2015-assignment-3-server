@@ -5,15 +5,15 @@ I don't work in pairs, then I implemented my client for my own server and saved 
 
 
 ## Pre-Requisites
+
 * Lab Session 07: [Webpage](https://sites.google.com/a/unitn.it/introsde_2015-16/lab-sessions/lab-session-7 "Permalink to LAB07: Reading and writing from Databases & JPA (Java Persistence API)")
 * Lab Session 08: [Webpage](https://sites.google.com/a/unitn.it/introsde_2015-16/lab-sessions/lab-session-8 "Permalink to LAB08: SOAP Web Services (1)")
 * Lab Session 09: [Webpage](https://sites.google.com/a/unitn.it/introsde_2015-16/lab-sessions/lab-session-9 "Permalink to LAB09: SOAP Web Services (2)")
 
 
 ## Project Structure
-```
- Server Repository
-```
+
+### Server Repository
 * **[introsde.document.endpoint](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/endpoint) -** will contain the class PeoplePublisher.java that is the stand alone server
 * **[introsde.document.dao](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/dao) -** will contain classes whose purpose will be to provide the underlying connection to the database
 * **[introsde.document.model](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/model) -** will include classes that represent my domain data model and map the content in my database to objects that can be manipulated in Java. My model classes composed as follows:
@@ -46,17 +46,27 @@ public class Measure implements Serializable {
 * **[LifeCoach.sqlite](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server) -** is the database that presents an evolved data model. 
 My database is based on a sqlite database as follows:
 ```sql
- Person (idPerson, firstname, lastname)
- Measure (idMeasure, dateRegistered, measureType, measureValue, valueType, isCurrent, idPerson)
-```
-* * *
+ CREATE TABLE Person (
+    idPerson    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    firstname   TEXT NOT NULL,
+    lastname    TEXT NOT NULL,
+    birthdate   DATE NOT NULL,
+    UNIQUE(firstname, lastname)
+);
 
+CREATE TABLE Measure (
+    idMeasure       INTEGER PRIMARY KEY AUTOINCREMENT,
+    dateRegistered  DATE NOT NULL,
+    measureType     TEXT NOT NULL,
+    measureValue    TEXT NOT NULL,
+    valueType       TEXT NOT NULL,
+    isCurrent       INTEGER NOT NULL DEFAULT '1',
+    idPerson        INTEGER NOT NULL,
+    FOREIGN KEY(idPerson) REFERENCES Person(idPerson)
+);
 ```
- Client Repository
-```
+
+### Client Repository
 * **[introsde.document.client](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/client) -**
 * **[introsde.document.wsimport](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/wsimport) -**
 * **[client-server-xml.log](https://github.com/yuly-sanchez/introsde-2015-assignment-2/blob/master/client-server-xml.log) -** is a log file of the client calling my server own using format XML format
-
-
-# 
