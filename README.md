@@ -84,16 +84,16 @@ This target calls the following targets defined in the build file:
 
 
 ## Services through SOAP APIs
-* **Method #1 :**  [readPersonList()](#readpersonList)
-* **Method #2 :**  [readPersonList(Long id)](#get-personid) 
-* **Method #3 :**  [updatePerson(Person p)](#put-personid)
-* **Method #4 :**  [createPerson(Person p)](#post-person)
-* **Method #5 :**  [deletePerson(Long id)](#delete-personid) 
-* **Method #6 :**  [readPersonHistory(Long id, String measureType)](#get-personidmeasuretype)
-* **Method #7 :**  [readMeasureTypes()](#get-personidmeasuretypemid)
-* **Method #8 :**  [readPersonMeasure(Long id, String measureType, Long mid)](#post-personidmeasuretype)
-* **Method #9 :**  [savePersonMeasure(Long id, Measure m)](#get-measuretypes)
-* **Method #10 :** [updatePersonMeasure(Long id, Measure m)](#put-personidmeasuretypemid)
+* **Method #1 :**  [readPersonList()](#readpersonlist)
+* **Method #2 :**  [readPerson(Long id)](#) 
+* **Method #3 :**  [updatePerson(Person p)](#)
+* **Method #4 :**  [createPerson(Person p)](#)
+* **Method #5 :**  [deletePerson(Long id)](#) 
+* **Method #6 :**  [readPersonHistory(Long id, String measureType)](#)
+* **Method #7 :**  [readMeasureTypes()](#)
+* **Method #8 :**  [readPersonMeasure(Long id, String measureType, Long mid)](#)
+* **Method #9 :**  [savePersonMeasure(Long id, Measure m)](#)
+* **Method #10 :** [updatePersonMeasure(Long id, Measure m)](#)
 
 
 #### ReadPersonList()
@@ -157,4 +157,337 @@ HTTP Status: 200
     </S:Body>
 </S:Envelope>
 ```
+
 ***
+#### ReadPerson(Long id)
+Return the person (personal info + currentHealth) of the person identified by id
+#####POST Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+        <m:readPerson>
+            <personId>3</personId>
+        <m:readPerson/>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**XML**
+```xml
+
+ <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <ns2:readPersonResponse xmlns:ns2="http://soap.document.introsde/">
+            <person>
+                <personId>3</personId>
+                <firstname>Marco</firstname>
+                <lastname>Pedrazzi</lastname>
+                <birthdate>1989-12-13</birthdate>
+                <currentHealth>
+                    <measure>
+                        <mid>7</mid>
+                        <dateRegistered>2014-05-31</dateRegistered>
+                        <measureType>weight</measureType>
+                        <measureValue>75.7</measureValue>
+                        <measureValueType>Double</measureValueType>
+                    </measure>
+                    <measure>
+                        <mid>8</mid>
+                        <dateRegistered>2014-07-05</dateRegistered>
+                        <measureType>height</measureType>
+                        <measureValue>178</measureValue>
+                        <measureValueType>Integer</measureValueType>
+                    </measure>
+                    <measure>
+                        <mid>9</mid>
+                        <dateRegistered>2014-03-07</dateRegistered>
+                        <measureType>steps</measureType>
+                        <measureValue>5500</measureValue>
+                        <measureValueType>Integer</measureValueType>
+                    </measure>
+                </currentHealth>
+            </person>
+        </ns2:readPersonResponse>
+    </S:Body>
+</S:Envelope>
+```
+
+***
+#### UpdatePerson(Person p)
+Update the personal information of the person identified by id (e.g., only the Person's information, not the measures of the health profile
+#####PUT Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+        <m:updatePerson>
+            <person>
+                <personId>5</personId>
+                <firstname>Guido</firstname>
+                <lastname>Pugliese</lastname>
+            </person>
+        </m:updatePerson>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**Before**
+```xml
+
+<person>
+    <personId>5</personId>
+    <firstname>Test</firstname>
+    <lastname>Creation</lastname>
+    <birthdate>1914-01-01</birthdate>
+    <currentHealth/>
+</person>
+```
+
+**After**
+```xml
+
+<person>
+    <personId>5</personId>
+    <firstname>Guido</firstname>
+    <lastname>Pugliese</lastname>
+    <birthdate>1914-01-01</birthdate>
+    <currentHealth/>
+</person>
+```
+
+***
+#### CreatePerson(Person p)
+Create a new person (only personal info, no currentHealth)
+#####POST Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+        <m:createPerson>
+            <person>
+                <firstname>Melanie</firstname>
+                <lastname>Escalante</lastname>
+                <birthdate>1990-09-19</birthdate>  
+            </person>
+        </m:createPerson>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**XML**
+```xml
+
+<person>
+    <personId>106</personId>
+    <firstname>Melanie</firstname>
+    <lastname>Escalante</lastname>
+    <birthdate>1990-09-19</birthdate>
+    <currentHealth/>
+</person>
+```
+
+***
+#### DeletePerson(Long id)
+Delete a person identified by {id} from the system
+#####DELETE Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+        <m:deletePerson>
+            <personId>106</personId>
+        </m:deletePerson>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**XML**
+```xml
+
+<message>Person with id: 106 deleted</message>
+```
+
+***
+#### ReadPersonHistory(Long id, String measureType)
+Return the history of a {measureType} for person identified by {id}
+#####POST Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+         <m:readPersonHistory>
+            <personId>1</personId>
+            <measureType>weight</measureType>
+         </m:readPersonHistory>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**XML**
+```xml
+
+<healthProfile-history>
+    <measure>
+        <mid>13</mid>
+        <dateRegistered>2014-01-03</dateRegistered>
+        <measureType>weight</measureType>
+        <measureValue>57.2</measureValue>
+        <measureValueType>Double</measureValueType>
+    </measure>
+    <measure>
+        <mid>14</mid>
+        <dateRegistered>2013-03-30</dateRegistered>
+        <measureType>weight</measureType>
+        <measureValue>52.5</measureValue>
+        <measureValueType>Double</measureValueType>
+    </measure>
+</healthProfile-history>
+```
+
+***
+#### ReadMeasureTypes()
+Return the list of the measures
+#####POST Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+         <m:readMeasureTypes/>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**XML**
+```xml
+
+<measureTypes>
+    <measureType>height</measureType>
+    <measureType>steps</measureType>
+    <measureType>weight</measureType>
+</measureTypes>
+```
+
+***
+#### ReadPersonMeasure(Long id, String measureType, Long mid)
+Return the value of {measureType} identified by {mid} for person identified by {id}
+#####POST Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+        <m:readPersonMeasure>
+            <personId>1</personId>
+            <measureType>weight</measureType>
+            <mid>13</mid>
+        </m:readPersonMeasure>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**XML**
+```xml
+
+<measure>57.2</measure>
+```
+
+***
+#### SavePersonMeasure(Long id, Measure m)
+Return a new measure of the person identified by {id} and archive the old value in the history
+#####POST Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+        <m:savePersonMeasure>
+            <personId>55</personId>
+            <measure>
+                <measureType>weight</measureType>
+                <measureValue>39</measureValue>
+                <measureValueType>Double</measureValueType>
+            </measure>
+        </m:savePersonMeasure>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**XML**
+```xml
+
+<measure>
+    <mid>285</mid>
+    <dateRegistered>2015-12-05</dateRegistered>
+    <measureType>weight</measureType>
+    <measureValue>39</measureValue>
+    <measureValueType>Double</measureValueType>
+</measure>
+```
+
+***
+#### updatePersonMeasure(Long id, Measure m)
+Return the measure identified with {m.mid} updated, related to the person identified by {id}
+#####POST Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://soap.assignment.introsde/">
+        <m:readPersonMeasure>
+            <personId>1</personId>
+            <measureType>weight</measureType>
+            <mid>13</mid>
+        </m:readPersonMeasure>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#####Response status
+HTTP Status: 200
+
+**XML**
+```xml
+
+<measure>57.2</measure>
+```
+
