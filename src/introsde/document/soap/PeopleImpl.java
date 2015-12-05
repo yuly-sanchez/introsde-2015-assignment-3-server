@@ -1,4 +1,4 @@
-package introsde.document.ws;
+package introsde.document.soap;
 import introsde.document.model.Measure;
 import introsde.document.model.Person;
 import introsde.document.wrapper.HealthHistoryWrapper;
@@ -22,7 +22,7 @@ import javax.jws.WebService;
  *
  */
 
-@WebService(endpointInterface = "introsde.document.ws.People",serviceName="PeopleService")
+@WebService(endpointInterface = "introsde.document.soap.People",serviceName="PeopleService")
 public class PeopleImpl implements People {
 
 	/**
@@ -65,14 +65,12 @@ public class PeopleImpl implements People {
     @Override
     public Person updatePerson(Person person) throws ParseException{
     	System.out.println("--> REQUEST: updatePerson(p)");
-        System.out.println("--> " + person.toString());
         Person existing = Person.getPersonById(person.getIdPerson());
 
         if (existing == null) {
         	//the person is not found
-        	System.out.println("---> Didn't update any Person with  id = " + person.getIdPerson());
+        	System.out.println("---> id: "+ person.getIdPerson() + " not found!");
         } else {
-            //person.setIdPerson(this.id);
             //checks if the client sent a name in order to update the person
             //if there is no name, remain the previous name, the same happens with Lastname and Birthdate
             if (person.getFirstname() == null){
@@ -98,10 +96,10 @@ public class PeopleImpl implements People {
     @Override
     public Person createPerson(Person person) {
         System.out.println("REQUESTED: createPerson(" + person.toString() + ")");
-    	Person p = Person.savePerson(person);
-    	return p;
+    	//Person p = Person.savePerson(person);
+    	//return p;
     	
-    	/*//checks if person includes currentMeasure, in other words a 'measure'
+    	//checks if person includes currentMeasure, in other words a 'measure'
     	if(person.getCurrentHealth() == null){
     		System.out.println("REQUESTED: createPerson(Person person) without measure");
     		return Person.savePerson(person);
@@ -110,8 +108,9 @@ public class PeopleImpl implements People {
     	
     		//removes the currentMeasure in the person and puts them in another variable
     		System.out.println("REQUESTED: createPerson(Person person) with new measure");
+    		System.out.println(person.getCurrentHealth().toString());
     		List<Measure> currentHealthList = new ArrayList<>();
-    		currentHealthList.addAll(person.getCurrentHealthMeasure());
+    		currentHealthList.addAll(person.getCurrentHealth());
     		
     		person.setCurrentHealth(null);
     		
@@ -119,38 +118,30 @@ public class PeopleImpl implements People {
     		Person p = Person.savePerson(person);
     		Long personId = p.getIdPerson();
     		
-    		//List<Measure> checkCurrentMeasureList = new ArrayList<>();
-    		
-    		//checks the list of the currentHealth saved
+    		//create today date
+			Calendar calendar = Calendar.getInstance();
+			
+    		//iterates on all 'measure' of the currentHealth list the client want insert
     		for(int i=0; i<currentHealthList.size(); i++){
     			
-    			//obtains a measure of the CurrentHealth list
-    			Measure target = currentHealthList.get(i);
-    			System.out.println(target.toString());
+    			Measure newMeasure = currentHealthList.get(i); 
     			
-    			//obtains a value of the new measure saved into currentHealth
-    			String measureType = target.getMeasureType();
-    			String measureValue = target.getMeasureValue();
-    			String measureValueType = target.getMeasureValueType();
+    			//associates the 'measure' with the person
+    			newMeasure.setPerson(p);
     			
-    			//create today date
-    			Calendar calendar = Calendar.getInstance();
+    			//save the new current measure value of the Measure in the measure db 
+    			newMeasure.setDateRegistered(calendar.getTime());
+    			newMeasure.setMeasureType(currentHealthList.get(i).getMeasureType());
+    			newMeasure.setMeasureValue(currentHealthList.get(i).getMeasureValue());
+    			newMeasure.setValueType(currentHealthList.get(i).getValueType());
+    			newMeasure.setIsCurrent(1);
+    			System.out.println(newMeasure.toString());
     			
-    			//archive the new value current measure also into measure db 
-    			Measure m = new Measure();
-    			m.setDateRegistered(calendar.getTime());
-    			m.setMeasureType(measureType);
-    			m.setMeasureValue(measureValue);
-    			m.setMeasureValueType(measureValueType);
-    			m.setPerson(p);
-    			
-    			Measure.saveMeasure(m);
-    			//checkCurrentMeasureList.add(m);
+    			Measure.saveMeasure(newMeasure);
     		}
-    		//person.setCurrentHealth(checkCurrentMeasureList);
     		return Person.getPersonById(personId);	
     	}
-*/    }
+}
 
     /**
      * Method #5: deletePerson(Long id) => personId
@@ -162,11 +153,6 @@ public class PeopleImpl implements People {
 		String result = "";
 		Person target = Person.getPersonById(id);
 		if(target != null){
-			/*EntityTransaction tx = LifeCoachDao.instance.createEntityManager().getTransaction();
-			tx.begin();
-			target = LifeCoachDao.instance.createEntityManager().merge(target);
-			LifeCoachDao.instance.createEntityManager().remove(target);
-			tx.commit();*/
 			Person.removePerson(target);
 			result = "Person with id: " + id.longValue() + " deleted";
 			return result;
@@ -187,7 +173,7 @@ public class PeopleImpl implements People {
 		System.out.println("--> REQUEST: getPersonHistory("+ id + " , " + measureType + ")");
     	
 		Person target = Person.getPersonById(id);
-    	List<Measure> measureHistory = Measure.getByPersonMeasure(target, measureType);
+    	List<Measure> measureHistory = Measure.getHistoryMeasureByPerson(target, measureType);
     	for(Measure m : measureHistory){
     		System.out.println(m.toString());
     	}
@@ -236,27 +222,11 @@ public class PeopleImpl implements People {
 	 */
 	@Override
 	public Measure savePersonMeasure(Long idPerson, Measure measure) {
-		//search the person by idPerson 
-		Person person = Person.getPersonById(idPerson);
-		//search the measureValueType by measureType
-		String measureValueType = Measure.getMeasureByMeasureType(measure.getMeasureType(), person);
+		System.out.println("--> REQUEST: savePersonMeasure("+ idPerson + " , " + measure.toString() + ")");
 		
-		//set today date
-		Calendar calendar = Calendar.getInstance();
-		
-		//set dateRegistered if there isn't a date defined
-		Date date;
-		if(measure.getDateRegistered() == null){
-			date = calendar.getTime();
-		}else{
-			date = measure.getDateRegistered();
-		}
-		
-		//save new 'measure' passed as input and insert the new measure value in the measure db
-		Measure m = new Measure(date, measure.getMeasureType(), measure.getMeasureValue(), measureValueType, person);
-		m = Measure.saveMeasure(m);
-		
-		return  Measure.getMeasureById(m.getIdMeasure().longValue());
+		Measure target = Measure.newMeasureValue(idPerson, measure);
+		System.out.println("--> return: " + target.toString());
+		return target;
 	}
 
 	/**
