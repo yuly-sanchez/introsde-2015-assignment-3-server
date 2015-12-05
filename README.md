@@ -84,7 +84,7 @@ This target calls the following targets defined in the build file:
 
 
 ## Services through SOAP APIs
-* **Method #1 :**  [readPersonList()](#get-person)
+* **Method #1 :**  [readPersonList()](#readpersonList)
 * **Method #2 :**  [readPersonList(Long id)](#get-personid) 
 * **Method #3 :**  [updatePerson(Person p)](#put-personid)
 * **Method #4 :**  [createPerson(Person p)](#post-person)
@@ -96,20 +96,26 @@ This target calls the following targets defined in the build file:
 * **Method #10 :** [updatePersonMeasure(Long id, Measure m)](#put-personidmeasuretypemid)
 
 
-#### readPersonList()
+#### ReadPersonList()
 Return all people saved into the database (personal info + currentHealth)
-##### Body POST Request
-```
- <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+#####POST Request
+```xml
+
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://soap.assignment.introsde/">
         <m:readPersonList />
     </soap:Body>
 </soap:Envelope>
 ```
-##### Response status
+
+#####Response status
 HTTP Status: 200
-##### XML
+
+**XML**
 ```xml
+
  <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
     <S:Body>
         <ns2:readPersonListResponse xmlns:ns2="http://soap.document.introsde/">
@@ -143,102 +149,12 @@ HTTP Status: 200
                         </measure>
                     </currentHealth>
                 </person>
-                <person>
-                    <personId>2</personId>
-                    <firstname>Antonio</firstname>
-                    <lastname>Pallino</lastname>
-                    <birthdate>1979-03-01</birthdate>
-                    <currentHealth>
-                        <measure>
-                            <mid>4</mid>
-                            <dateRegistered>2014-02-25</dateRegistered>
-                            <measureType>weight</measureType>
-                            <measureValue>85.5</measureValue>
-                            <measureValueType>Double</measureValueType>
-                        </measure>
-                        <measure>
-                            <mid>5</mid>
-                            <dateRegistered>2014-06-11</dateRegistered>
-                            <measureType>height</measureType>
-                            <measureValue>180</measureValue>
-                            <measureValueType>Integer</measureValueType>
-                        </measure>
-                        <measure>
-                            <mid>6</mid>
-                            <dateRegistered>2014-09-01</dateRegistered>
-                            <measureType>steps</measureType>
-                            <measureValue>10000</measureValue>
-                            <measureValueType>Integer</measureValueType>
-                        </measure>
-                    </currentHealth>
-                </person>
-                <person>
-                    <personId>3</personId>
-                    <firstname>Marco</firstname>
-                    <lastname>Pedrazzi</lastname>
-                    <birthdate>1989-12-13</birthdate>
-                    <currentHealth>
-                        <measure>
-                            <mid>7</mid>
-                            <dateRegistered>2014-05-31</dateRegistered>
-                            <measureType>weight</measureType>
-                            <measureValue>75.7</measureValue>
-                            <measureValueType>Double</measureValueType>
-                        </measure>
-                        <measure>
-                            <mid>8</mid>
-                            <dateRegistered>2014-07-05</dateRegistered>
-                            <measureType>height</measureType>
-                            <measureValue>178</measureValue>
-                            <measureValueType>Integer</measureValueType>
-                        </measure>
-                        <measure>
-                            <mid>9</mid>
-                            <dateRegistered>2014-03-07</dateRegistered>
-                            <measureType>steps</measureType>
-                            <measureValue>5500</measureValue>
-                            <measureValueType>Integer</measureValueType>
-                        </measure>
-                    </currentHealth>
-                </person>
-                <person>
-                    <personId>4</personId>
-                    <firstname>Luka</firstname>
-                    <lastname>Modric</lastname>
-                    <birthdate>1985-09-09</birthdate>
-                    <currentHealth>
-                        <measure>
-                            <mid>10</mid>
-                            <dateRegistered>2014-06-18</dateRegistered>
-                            <measureType>weight</measureType>
-                            <measureValue>65</measureValue>
-                            <measureValueType>Double</measureValueType>
-                        </measure>
-                        <measure>
-                            <mid>11</mid>
-                            <dateRegistered>2014-06-18</dateRegistered>
-                            <measureType>height</measureType>
-                            <measureValue>174</measureValue>
-                            <measureValueType>Integer</measureValueType>
-                        </measure>
-                        <measure>
-                            <mid>12</mid>
-                            <dateRegistered>2014-11-22</dateRegistered>
-                            <measureType>steps</measureType>
-                            <measureValue>20700</measureValue>
-                            <measureValueType>Integer</measureValueType>
-                        </measure>
-                    </currentHealth>
-                </person>
-                <person>
-                    <personId>5</personId>
-                    <firstname>Test</firstname>
-                    <lastname>Creation</lastname>
-                    <birthdate>1914-01-01</birthdate>
-                    <currentHealth/>
-                </person>
+                
+                <!--more people-->
+                
             </people>
         </ns2:readPersonListResponse>
     </S:Body>
 </S:Envelope>
 ```
+***
