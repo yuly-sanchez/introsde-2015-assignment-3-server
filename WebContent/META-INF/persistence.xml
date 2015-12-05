@@ -12,7 +12,7 @@
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
             
             <!-- the last part of the URL is the path to the sqlite file of the db -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:lifecoach.sqlite" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:LifeCoach.sqlite" />
             
             <!-- set it to ALL to see all the JPA related debugging information -->
             <property name="eclipselink.logging.level" value="INFO" />
