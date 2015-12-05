@@ -1,5 +1,6 @@
 package introsde.document.endpoint;
-import introsde.document.ws.PeopleImpl;
+import introsde.document.soap.PeopleImpl;
+
 import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.io.IOException;
