@@ -1,5 +1,5 @@
 
-package introsde.document.ws;
+package introsde.document.soap;
 
 import introsde.document.model.Measure;
 import introsde.document.model.Person;
@@ -8,7 +8,6 @@ import introsde.document.wrapper.MeasureTypesWrapper;
 import introsde.document.wrapper.PeopleWrapper;
 
 import java.text.ParseException;
-import java.util.List;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
