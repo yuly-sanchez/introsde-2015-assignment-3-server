@@ -35,7 +35,7 @@ public interface People {
 
     @WebMethod(operationName="updatePerson")
     @WebResult(name="personId") 
-    public Long updatePerson(@WebParam(name="person") Person person) throws ParseException;
+    public Long updatePerson(@WebParam(name="person") Person person);
     
     @WebMethod(operationName="createPerson")
     @WebResult(name="personId") 
