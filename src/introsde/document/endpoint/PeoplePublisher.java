@@ -20,7 +20,7 @@ public class PeoplePublisher {
             HOSTNAME = "localhost";
         }
         String PORT = "6902";
-        String BASE_URL = "/ws/people";
+        String BASE_URL = "/soap/people"; //"/ws/people"; 
 
         if (String.valueOf(System.getenv("PORT")) != "null"){
             PORT=String.valueOf(System.getenv("PORT"));
