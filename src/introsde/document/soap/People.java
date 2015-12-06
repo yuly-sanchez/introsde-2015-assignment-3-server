@@ -34,12 +34,12 @@ public interface People {
     public Person getPerson(@WebParam(name="personId") Long id);
 
     @WebMethod(operationName="updatePerson")
-    @WebResult(name="person") 
-    public Person updatePerson(@WebParam(name="person") Person person) throws ParseException;
+    @WebResult(name="personId") 
+    public Long updatePerson(@WebParam(name="person") Person person) throws ParseException;
     
     @WebMethod(operationName="createPerson")
-    @WebResult(name="person") 
-    public Person createPerson(@WebParam(name="person") Person person);
+    @WebResult(name="personId") 
+    public Long createPerson(@WebParam(name="person") Person person);
 
     @WebMethod(operationName="deletePerson")
     @WebResult(name="message") 
@@ -62,10 +62,7 @@ public interface People {
     public Long savePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure);
     
     @WebMethod(operationName="updatePersonMeasure")
-    @WebResult(name="measure")
-    public Measure updatePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure, @WebParam(name="mid") Long idMeasure);
+    @WebResult(name="mid")
+    public Long updatePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure, @WebParam(name="mid") Long idMeasure);
     
-    //@WebMethod(operationName="updatePersonHealthProfile")
-    //@WebResult(name="hpId") 
-    //public int updatePersonHP(@WebParam(name="personId") int id, @WebParam(name="healthProfile") LifeStatus hp);
 }
