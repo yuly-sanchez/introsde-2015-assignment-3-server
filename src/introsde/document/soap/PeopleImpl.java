@@ -95,24 +95,19 @@ public class PeopleImpl implements People {
      */
     @Override
     public Person createPerson(Person person) {
-        System.out.println("REQUESTED: createPerson(" + person.toString() + ")");
-    	//Person p = Person.savePerson(person);
-    	//return p;
-    	
-    	//checks if person includes currentMeasure, in other words a 'measure'
-    	if(person.getCurrentHealth() == null){
-    		System.out.println("REQUESTED: createPerson(Person person) without measure");
+        //checks if person includes currentMeasure, in other words a 'measure'
+    	if(person.currentHealth == null){
+    		System.out.println("REQUESTED: createPerson(" + person.getFirstname() + ") without measure");
     		return Person.savePerson(person);
     		
     	}else{
     	
     		//removes the currentMeasure in the person and puts them in another variable
-    		System.out.println("REQUESTED: createPerson(Person person) with new measure");
-    		System.out.println(person.getCurrentHealth().toString());
+    		System.out.println("REQUESTED: createPerson(" +  person.getFirstname() + ") with new measure");
     		List<Measure> currentHealthList = new ArrayList<>();
-    		currentHealthList.addAll(person.getCurrentHealth());
+    		currentHealthList.addAll(person.currentHealth);
     		
-    		person.setCurrentHealth(null);
+    		person.currentHealth.clear();
     		
     		//saves the person in the database and retrieves his/her idPerson
     		Person p = Person.savePerson(person);
@@ -216,17 +211,70 @@ public class PeopleImpl implements People {
 	}
 
 	/**
-	 * Method #9: savePersonMeasure(Long id, Measure m) => Measure
+	 * Method #9: savePersonMeasure(Long id, Measure m) => Long mid
 	 * Saves a new measure object {m} (e.g. weight) of Person identified by {id} and 
 	 * archive the old value in the history
 	 */
 	@Override
-	public Measure savePersonMeasure(Long idPerson, Measure measure) {
+	public Long savePersonMeasure(Long idPerson, Measure measure) {
 		System.out.println("--> REQUEST: savePersonMeasure("+ idPerson + " , " + measure.toString() + ")");
 		
-		Measure target = Measure.newMeasureValue(idPerson, measure);
-		System.out.println("--> return: " + target.toString());
-		return target;
+		Measure target = null;
+		//set today date
+		Calendar calendar = Calendar.getInstance();
+		
+		//search the person by idPerson 
+		Person person = Person.getPersonById(idPerson);
+		
+		//check if found person with this idPerson
+		if(person != null){
+			System.out.println("--> Found person with id: " + idPerson);
+			
+			//check if measure already exits for person identified by id 
+			target = Measure.foundCurrentMeasure(person, measure.getMeasureType());
+			
+			if(target != null){
+				System.out.println("--> Found measure...");
+				target.setIsCurrent(0);
+				target.setPerson(person);
+				Measure.updateMeasure(target);
+				
+				//create a new measure that the client want
+				Measure newMeasure = new Measure();
+				newMeasure.setIsCurrent(1);
+				newMeasure.setDateRegistered(calendar.getTime());
+				newMeasure.setMeasureType(measure.getMeasureType());
+				newMeasure.setMeasureValue(measure.getMeasureValue());
+				newMeasure.setValueType(measure.getValueType());
+				newMeasure.setPerson(person);
+				
+				System.out.println("--> measure created...");
+				
+				//save the new measure
+				Measure.saveMeasure(newMeasure);
+				
+				System.out.println("--> measure added");
+				return newMeasure.getIdMeasure();
+			
+			}else{
+				target = new Measure();
+				target.setIsCurrent(1);
+				target.setDateRegistered(calendar.getTime());
+				target.setMeasureType(measure.getMeasureType());
+				target.setMeasureValue(measure.getMeasureValue());
+				target.setValueType(measure.getValueType());
+				target.setPerson(person);
+				
+				System.out.println("--> measure created...");
+				
+				//save the new measure
+				Measure.saveMeasure(target);
+				
+				System.out.println("--> measure added");
+				return target.getIdMeasure();
+			}
+		}
+		else return new Long(-1);
 	}
 
 	/**
@@ -234,21 +282,43 @@ public class PeopleImpl implements People {
 	 * Updates the measure identified with {m.mid}, related to the Person identified by {id}
 	 */
 	@Override
-	public Measure updatePersonMeasure(Long idPerson, Measure measure) {
-		// TODO Auto-generated method stub
-		return null;
+	public Measure updatePersonMeasure(Long idPerson, Measure measure, Long idMeasure) {
+		System.out.println("--> REQUEST: updatePersonMeasure("+ idPerson + " , " + measure.toString() + " , " + idMeasure + ")");
+		
+		Measure existing = Measure.getMeasureById(idMeasure);
+		Person person = Person.getPersonById(idPerson);
+		//set today date
+		Calendar calendar = Calendar.getInstance();
+		
+		if(existing == null){
+			System.out.println("--> Update: MeasureType with " + idMeasure + " not found");
+		}else{
+			System.out.println("--> Update: MeasureType with " + idMeasure + " found");
+			
+			//isCurrent = 1
+			if(existing.getIsCurrent() == 1){
+				//change the value
+				existing.setDateRegistered(calendar.getTime());
+				existing.setMeasureValue(measure.getMeasureValue());
+				Measure.updateMeasure(existing);
+			
+			//isCurrent = 0
+			}else{
+				//check if existing a measure current
+				Measure target = Measure.foundCurrentMeasure(person, existing.getMeasureType());
+				if(target != null){
+					target.setIsCurrent(0);
+					target.setPerson(person);
+					Measure.updateMeasure(target);
+					
+					//change the value
+					existing.setIsCurrent(1);
+					existing.setDateRegistered(calendar.getTime());
+					existing.setMeasureValue(measure.getMeasureValue());
+					Measure.updateMeasure(existing);
+				}
+			}	
+		}
+		return Measure.getMeasureById(existing.getIdMeasure());
 	}
-	
-	
-   /* @Override
-    public int updatePersonHP(int id, LifeStatus hp) {
-        LifeStatus ls = LifeStatus.getLifeStatusById(hp.getIdMeasure());
-        if (ls.getPerson().getIdPerson() == id) {
-            LifeStatus.updateLifeStatus(hp);
-            return hp.getIdMeasure();
-        } else {
-            return -1;
-        }
-    }*/
-
 }
