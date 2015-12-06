@@ -59,11 +59,11 @@ public class PeopleImpl implements People {
     }
 
     /**
-     * Method #3: updatePerson(Person p) => Person 
-     * Returns the personal information updated of the Person identified by {id}
+     * Method #3: updatePerson(Person p) => personId 
+     * Update the personal information of the Person identified by {id} and return his/her personId
      */
     @Override
-    public Person updatePerson(Person person) throws ParseException{
+    public Long updatePerson(Person person) throws ParseException{
     	System.out.println("--> REQUEST: updatePerson(p)");
         Person existing = Person.getPersonById(person.getIdPerson());
 
@@ -85,20 +85,21 @@ public class PeopleImpl implements People {
             person.setCurrentHealth(existing.getCurrentHealth());
             Person.updatePerson(person); 
         }
-        return person;
+        return person.getIdPerson();
     }
 
     /**
-     * Method #4: createPerson(Person p) => Person 
-     * Creates a new Person and returns the newly created person with its assigned id 
+     * Method #4: createPerson(Person p) => personId 
+     * Creates a new Person and returns the his/her person id 
      * (if a health profile is included, create also those measurements for the new Person)
      */
     @Override
-    public Person createPerson(Person person) {
+    public Long createPerson(Person person) {
         //checks if person includes currentMeasure, in other words a 'measure'
     	if(person.currentHealth == null){
     		System.out.println("REQUESTED: createPerson(" + person.getFirstname() + ") without measure");
-    		return Person.savePerson(person);
+    		Person.savePerson(person);
+    		return person.getIdPerson();
     		
     	}else{
     	
@@ -134,7 +135,7 @@ public class PeopleImpl implements People {
     			
     			Measure.saveMeasure(newMeasure);
     		}
-    		return Person.getPersonById(personId);	
+    		return personId;	
     	}
 }
 
@@ -278,11 +279,12 @@ public class PeopleImpl implements People {
 	}
 
 	/**
-	 * Method #10: updatePersonMeasure(Long id, Measure m) => Measure
+	 * Method #10: updatePersonMeasure(Long id, Measure m, Long mid) => mid
 	 * Updates the measure identified with {m.mid}, related to the Person identified by {id}
+	 * and return the mid associated to the measure updated 
 	 */
 	@Override
-	public Measure updatePersonMeasure(Long idPerson, Measure measure, Long idMeasure) {
+	public Long updatePersonMeasure(Long idPerson, Measure measure, Long idMeasure) {
 		System.out.println("--> REQUEST: updatePersonMeasure("+ idPerson + " , " + measure.toString() + " , " + idMeasure + ")");
 		
 		Measure existing = Measure.getMeasureById(idMeasure);
@@ -319,6 +321,6 @@ public class PeopleImpl implements People {
 				}
 			}	
 		}
-		return Measure.getMeasureById(existing.getIdMeasure());
+		return existing.getIdMeasure();
 	}
 }
