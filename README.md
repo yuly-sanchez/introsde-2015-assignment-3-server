@@ -92,7 +92,7 @@ This target calls the following targets defined in the build file:
 * **Method #7 :**  [readMeasureTypes()](#readmeasuretypes)
 * **Method #8 :**  [readPersonMeasure(Long id, String measureType, Long mid)](#readpersonmeasurelong-id-string-measuretype-long-mid)
 * **Method #9 :**  [savePersonMeasure(Long id, Measure m)](#savepersonmeasurelong-id-measure-m)
-* **Method #10 :** [updatePersonMeasure(Long id, Measure m)](#updatepersonmeasurelong-id-measure-m)
+* **Method #10 :** [updatePersonMeasure(Long id, Measure m, Long mid)](#updatepersonmeasurelong-id-measure-m-long-mid)
 
 
 #### ReadPersonList()
@@ -279,7 +279,14 @@ Create a new person (only personal info, no currentHealth)
             <person>
                 <firstname>Melanie</firstname>
                 <lastname>Escalante</lastname>
-                <birthdate>1990-09-19</birthdate>  
+                <birthdate>1990-09-19</birthdate>
+                <currentHealth>
+                    <measure>
+                        <measureType>weight</measureType>
+                        <measureValue>70</measureValue>
+                        <measureValueType>Double</measureValueType>
+                    </measure>
+                </currentHealth> 
             </person>
         </m:createPerson>
     </soap:Body>
@@ -297,7 +304,15 @@ HTTP Status: 200
     <firstname>Melanie</firstname>
     <lastname>Escalante</lastname>
     <birthdate>1990-09-19</birthdate>
-    <currentHealth/>
+    <currentHealth>
+        <measure>
+            <mid>484</mid>
+            <dateRegistered>2015-12-06</dateRegistered>
+            <measureType>weight</measureType>
+            <measureValue>70</measureValue>
+            <measureValueType>Double</measureValueType>
+        </measure>
+    </currentHealth>
 </person>
 ```
 
@@ -427,7 +442,7 @@ HTTP Status: 200
 
 ***
 #### SavePersonMeasure(Long id, Measure m)
-Return a new measure of the person identified by {id} and archive the old value in the history
+Return a mid of the new measure of the person identified by {id} and archive the old value in the history
 #####POST Request
 ```xml
 
@@ -453,18 +468,13 @@ HTTP Status: 200
 **XML**
 ```xml
 
-<measure>
-    <mid>285</mid>
-    <dateRegistered>2015-12-05</dateRegistered>
-    <measureType>weight</measureType>
-    <measureValue>39</measureValue>
-    <measureValueType>Double</measureValueType>
-</measure>
+<mid>39</mid>
 ```
 
 ***
-#### updatePersonMeasure(Long id, Measure m)
-Return the measure identified with {m.mid} updated, related to the person identified by {id}
+#### updatePersonMeasure(Long id, Measure m, Long mid)
+Return the measure identified with {m.mid} updated, related to the person identified by {id}. 
+If m is a current health update the value. But if m is a history health, search one current measure with same measureType of the m and set his/her attribute isCurrent a 0. And m will become a current measure (set isCurrent a 1), update the current date and the value
 #####POST Request
 ```xml
 
@@ -472,11 +482,13 @@ Return the measure identified with {m.mid} updated, related to the person identi
     xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
     soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://soap.assignment.introsde/">
-        <m:readPersonMeasure>
-            <personId>1</personId>
-            <measureType>weight</measureType>
-            <mid>13</mid>
-        </m:readPersonMeasure>
+        <m:updatePersonMeasure>
+            <personId>55</personId>
+            <measure>
+                <measureValue>35</measureValue>
+            </measure>
+            <mid>434</mid>
+        </m:updatePersonMeasure>
     </soap:Body>
 </soap:Envelope>
 ```
@@ -487,6 +499,11 @@ HTTP Status: 200
 **XML**
 ```xml
 
-<measure>57.2</measure>
+<measure>
+    <mid>434</mid>
+    <dateRegistered>2015-12-06</dateRegistered>
+    <measureType>weight</measureType>
+    <measureValue>35</measureValue>
+    <measureValueType>Double</measureValueType>
+</measure>
 ```
-
