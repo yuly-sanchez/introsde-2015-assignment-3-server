@@ -39,7 +39,7 @@ public class Measure implements Serializable {
 * **[introsde.document.soap](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/soap) -** 
 * **[introsde.document.wrapper](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/wrapper) -** will contain the wrapper used to format XML and JSON
 * **[introsde.document.adapter](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/adapter) -**
-* **[introsde.document.converter](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/wrapper) -**
+* **[introsde.document.converter](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/converter) -**
 * **[persistence.xml](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/blob/master/WebContent/META-INF/persistence.xml) -** is a file presents into folder named META-INF  
 * **[build.xml](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/blob/master/build.xml) -** is an ant script which automates repetitive tasks directly from the command line.
 * **[ivy.xml](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/blob/master/ivy.xml) -** is a file which can specify the dependencies 
@@ -80,20 +80,19 @@ This project contains the `ant build script` to compile source code, run tests a
 This target calls the following targets defined in the build file:
 * `execute.client.myServer.xml` send all requests to my server with the body in XML format. This generate the ouput saved into [client-server-xml.log](https://github.com/yuly-sanchez/introsde-2015-assignment-2/blob/master/client-server-xml.log) file. 
 * `execute.client.myServer.json` send all requests to my server with the body in JSON format. This generate the ouput saved into [client-server-json.log](https://github.com/yuly-sanchez/introsde-2015-assignment-2/blob/master/client-server-json.log) file. 
-<DA COMPLETARE>
 
 
 ## Services through SOAP APIs
 * **Method #1 :**  [readPersonList()](#readpersonlist)
-* **Method #2 :**  [readPerson(Long id)](#) 
-* **Method #3 :**  [updatePerson(Person p)](#)
-* **Method #4 :**  [createPerson(Person p)](#)
-* **Method #5 :**  [deletePerson(Long id)](#) 
-* **Method #6 :**  [readPersonHistory(Long id, String measureType)](#)
-* **Method #7 :**  [readMeasureTypes()](#)
-* **Method #8 :**  [readPersonMeasure(Long id, String measureType, Long mid)](#)
-* **Method #9 :**  [savePersonMeasure(Long id, Measure m)](#)
-* **Method #10 :** [updatePersonMeasure(Long id, Measure m)](#)
+* **Method #2 :**  [readPerson(Long id)](#readpersonlong-id) 
+* **Method #3 :**  [updatePerson(Person p)](#updatepersonperson-p)
+* **Method #4 :**  [createPerson(Person p)](#createpersonperson-p)
+* **Method #5 :**  [deletePerson(Long id)](#deletepersonlong-id) 
+* **Method #6 :**  [readPersonHistory(Long id, String measureType)](#readpersonhistorylong-id-string-measuretype)
+* **Method #7 :**  [readMeasureTypes()](#readmeasuretypes)
+* **Method #8 :**  [readPersonMeasure(Long id, String measureType, Long mid)](#readpersonmeasurelong-id-string-measuretype-long-mid)
+* **Method #9 :**  [savePersonMeasure(Long id, Measure m)](#savepersonmeasurelong-id-measure-m)
+* **Method #10 :** [updatePersonMeasure(Long id, Measure m)](#updatepersonmeasurelong-id-measure-m)
 
 
 #### ReadPersonList()
