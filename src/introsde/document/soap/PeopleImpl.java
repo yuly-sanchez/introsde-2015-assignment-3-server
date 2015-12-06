@@ -71,6 +71,7 @@ public class PeopleImpl implements People {
         	//the person is not found
         	System.out.println("---> id: "+ person.getIdPerson() + " not found!");
         } else {
+        	person.setIdPerson(existing.getIdPerson());
             //checks if the client sent a name in order to update the person
             //if there is no name, remain the previous name, the same happens with Lastname and Birthdate
             if (person.getFirstname() == null){
