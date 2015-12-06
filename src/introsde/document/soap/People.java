@@ -58,12 +58,12 @@ public interface People {
     public String getPersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measureType") String measureType, @WebParam(name="mid") Long idMeasure);
     
     @WebMethod(operationName="savePersonMeasure")
-    @WebResult(name="measure")
-    public Measure savePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure);
+    @WebResult(name="mid")
+    public Long savePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure);
     
     @WebMethod(operationName="updatePersonMeasure")
     @WebResult(name="measure")
-    public Measure updatePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure);
+    public Measure updatePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure, @WebParam(name="mid") Long idMeasure);
     
     //@WebMethod(operationName="updatePersonHealthProfile")
     //@WebResult(name="hpId") 
