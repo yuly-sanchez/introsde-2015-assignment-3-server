@@ -63,7 +63,7 @@ public class PeopleImpl implements People {
      * Update the personal information of the Person identified by {id} and return his/her personId
      */
     @Override
-    public Long updatePerson(Person person) throws ParseException{
+    public Long updatePerson(Person person){
     	System.out.println("--> REQUEST: updatePerson(p)");
         Person existing = Person.getPersonById(person.getIdPerson());
 
