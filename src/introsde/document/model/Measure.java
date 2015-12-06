@@ -214,7 +214,6 @@ public class Measure implements Serializable {
 		return measuresList;
 	}
 	
-	
 	/**
 	 * Returns the history of a measureType for a person
 	 * @param p
@@ -232,6 +231,10 @@ public class Measure implements Serializable {
 		return list;
 	}
 
+	/**
+	 * Returns the list of the measureTypes
+	 * @return list of the measureTypes
+	 */
 	public static List<String> getByMeasureTypes() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		List<String> list = em.createNamedQuery("Measure.findMeasureTypes",
@@ -240,6 +243,14 @@ public class Measure implements Serializable {
 		return list;
 	}
 
+	/**
+	 * Given a person, measure type and mid, the function returns the corresponding Measure
+	 * object.
+	 * @param p
+	 * @param measureType
+	 * @param idMeasure
+	 * @return
+	 */
 	public static Measure getByPersonMid(Person p, String measureType,Long idMeasure) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		Measure measure = em
@@ -270,71 +281,5 @@ public class Measure implements Serializable {
 		} catch (Exception e) {
 			return null;
 		}
-	}
-	
-	public static Measure newMeasureValue(Long id, Measure m){
-		
-		Measure target = null;
-		Measure result = null;
-		//set today date
-		Calendar calendar = Calendar.getInstance();
-		
-		//search the person by idPerson 
-		Person person = Person.getPersonById(id);
-		
-		//check if found person with this idPerson
-		if(person != null){
-			System.out.println("--> Found person with id: " + id);
-			
-			//check if measure already exits for person identified by id 
-			target = foundCurrentMeasure(person, m.getMeasureType());
-			
-			if(target != null){
-				System.out.println("--> Found measure...");
-				target.setIsCurrent(0);
-				target.setIdMeasure(target.getIdMeasure());
-				target.setDateRegistered(target.getDateRegistered());
-				target.setMeasureType(target.getMeasureType());
-				target.setMeasureValue(target.getMeasureValue());
-				target.setValueType(target.getValueType());
-				target.setPerson(person);
-				Measure.updateMeasure(target);
-				
-				
-				//create a new measure that the client want
-				Measure newMeasure = new Measure();
-				newMeasure.setIsCurrent(1);
-				newMeasure.setDateRegistered(calendar.getTime());
-				newMeasure.setMeasureType(m.getMeasureType());
-				newMeasure.setMeasureValue(m.getMeasureValue());
-				newMeasure.setValueType(m.getValueType());
-				newMeasure.setPerson(person);
-				
-				//save the new measure
-				Measure.saveMeasure(newMeasure);
-				
-				System.out.println("--> measure added");
-				result = Measure.getMeasureById(newMeasure.getIdMeasure());
-			
-			}else{
-				target = new Measure();
-				target.setIsCurrent(1);
-				target.setDateRegistered(calendar.getTime());
-				target.setMeasureType(m.getMeasureType());
-				target.setMeasureValue(m.getMeasureValue());
-				target.setValueType(m.getValueType());
-				target.setPerson(person);
-				
-				System.out.println("--> measure created...");
-				
-				//save the new measure
-				Measure.saveMeasure(target);
-				
-				System.out.println("--> measure added");
-				result = Measure.getMeasureById(target.getIdMeasure());
-			}
-		
-		}
-		return result;
 	}
 }
