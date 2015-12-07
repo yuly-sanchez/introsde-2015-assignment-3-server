@@ -1,6 +1,8 @@
 
 package introsde.document.soap;
 
+import java.util.List;
+
 import introsde.document.model.Measure;
 import introsde.document.model.Person;
 import introsde.document.wrapper.HealthHistoryWrapper;
@@ -24,19 +26,19 @@ import javax.jws.soap.SOAPBinding.Use;
 public interface People {
 	
 	@WebMethod(operationName="readPersonList")
-    @WebResult(name="people") 
-    public PeopleWrapper getPeople();
+    @WebResult(name="person") 
+    public List<Person> getPeople();
 	
     @WebMethod(operationName="readPerson")
     @WebResult(name="person") 
     public Person getPerson(@WebParam(name="personId") Long id);
 
     @WebMethod(operationName="updatePerson")
-    @WebResult(name="personId") 
+    @WebResult(name="person") 
     public Long updatePerson(@WebParam(name="person") Person person);
     
     @WebMethod(operationName="createPerson")
-    @WebResult(name="personId") 
+    @WebResult(name="person") 
     public Long createPerson(@WebParam(name="person") Person person);
 
     @WebMethod(operationName="deletePerson")
@@ -44,23 +46,23 @@ public interface People {
     public String deletePerson(@WebParam(name="personId") Long id);
 
     @WebMethod(operationName="readPersonHistory")
-    @WebResult(name="healthProfile-history")
-    public HealthHistoryWrapper getPersonHistory(@WebParam(name="personId") Long id, @WebParam(name="measureType") String measureType);
+    @WebResult(name="mesure")
+    public List<Measure> getPersonHistory(@WebParam(name="personId") Long id, @WebParam(name="measureType") String measureType);
     
     @WebMethod(operationName="readMeasureTypes")
-    @WebResult(name="measureTypes")
-    public MeasureTypesWrapper getMeasureTypes();
+    @WebResult(name="measureType")
+    public List<String> getMeasureTypes();
     
     @WebMethod(operationName="readPersonMeasure")
     @WebResult(name="measure")
     public String getPersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measureType") String measureType, @WebParam(name="mid") Long idMeasure);
     
     @WebMethod(operationName="savePersonMeasure")
-    @WebResult(name="mid")
+    @WebResult(name="measure")
     public Long savePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure);
     
     @WebMethod(operationName="updatePersonMeasure")
-    @WebResult(name="mid")
+    @WebResult(name="measure")
     public Long updatePersonM(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure, @WebParam(name="mid") Long idMeasure);
     
 }
