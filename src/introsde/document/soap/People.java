@@ -7,8 +7,6 @@ import introsde.document.wrapper.HealthHistoryWrapper;
 import introsde.document.wrapper.MeasureTypesWrapper;
 import introsde.document.wrapper.PeopleWrapper;
 
-import java.text.ParseException;
-
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
