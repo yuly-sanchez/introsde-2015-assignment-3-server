@@ -95,7 +95,7 @@
             </copy>
         </target>
         
-    	<target name="start">
+    	<target name="start" depends="install">
             <echo message="app start introsde.document.endpoint.PeoplePublisher in ${build.dir}" />
             <java classname="introsde.document.endpoint.PeoplePublisher" classpath="${build.dir}" fork="true">
                 <arg value="$JAVA_OPTS  -cp" />
