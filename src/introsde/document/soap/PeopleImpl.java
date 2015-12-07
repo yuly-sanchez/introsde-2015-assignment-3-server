@@ -5,10 +5,8 @@ import introsde.document.wrapper.HealthHistoryWrapper;
 import introsde.document.wrapper.MeasureTypesWrapper;
 import introsde.document.wrapper.PeopleWrapper;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebMethod;
