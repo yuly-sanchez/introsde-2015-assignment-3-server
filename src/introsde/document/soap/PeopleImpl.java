@@ -63,16 +63,10 @@ public class PeopleImpl implements People {
     @Override
     public Long updatePerson(Person person){
     	System.out.println("--> REQUEST: updatePerson(p)");
+    	
     	Person existing = Person.getPersonById(person.getIdPerson());
-
-		if (existing != null) {
-			Person.updatePerson(person);
-			return new Long(0);
-		}else{
-			return new Long(-1);
-		}
-        /*Person existing = Person.getPersonById(person.getIdPerson());
-        Long personId = 0L;
+    	Long personId = 0L;
+        
         if (existing == null) {
         	//the person is not found
         	System.out.println("---> id: "+ person.getIdPerson() + " not found!");
@@ -95,7 +89,7 @@ public class PeopleImpl implements People {
             Person.updatePerson(person);
             personId = person.getIdPerson(); 
         }
-        return personId;*/
+        return personId;
     }
 
     /**
