@@ -4,16 +4,15 @@ In this **[assignment](https://sites.google.com/a/unitn.it/introsde_2015-16/lab-
 I don't work in pairs, then I implemented my client for my own server and saved all the output in a logfile and also commited it into client repository.
 
 
-## Pre-Requisites
+## Server
 
-* Lab Session 07: [Webpage](https://sites.google.com/a/unitn.it/introsde_2015-16/lab-sessions/lab-session-7 "Permalink to LAB07: Reading and writing from Databases & JPA (Java Persistence API)")
-* Lab Session 08: [Webpage](https://sites.google.com/a/unitn.it/introsde_2015-16/lab-sessions/lab-session-8 "Permalink to LAB08: SOAP Web Services (1)")
-* Lab Session 09: [Webpage](https://sites.google.com/a/unitn.it/introsde_2015-16/lab-sessions/lab-session-9 "Permalink to LAB09: SOAP Web Services (2)")
+* Server URL: [Webpage](https://agile-shelf-1769.herokuapp.com/)
+* WSDL URL: [Webpage](https://agile-shelf-1769.herokuapp.com/soap/people?wsdl)
+* Client Repository GitHub: [Webpage](https://github.com/yuly-sanchez/introsde-2015-assignment-3-client)
 
 
 ## Project Structure
 
-### Server Repository
 * **[introsde.document.endpoint](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/endpoint) -** will contain the class PeoplePublisher.java that is the stand alone server
 * **[introsde.document.dao](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/dao) -** will contain classes whose purpose will be to provide the underlying connection to the database
 * **[introsde.document.model](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/model) -** will include classes that represent my domain data model and map the content in my database to objects that can be manipulated in Java. My model classes composed as follows:
@@ -36,10 +35,10 @@ public class Measure implements Serializable {
     private int isCurrent; // 1 current Health, 0 History value
 }
 ```
-* **[introsde.document.soap](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/soap) -** 
+* **[introsde.document.soap](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/soap) -** will contain SOAP Web Services
 * **[introsde.document.wrapper](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/wrapper) -** will contain the wrapper used to format XML and JSON
-* **[introsde.document.adapter](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/adapter) -**
-* **[introsde.document.converter](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/converter) -**
+* **[introsde.document.adapter](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/adapter) -** will contain a class used to format date Calendar
+* **[introsde.document.converter](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/converter) -** will contain a class used to format date Calendar
 * **[persistence.xml](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/blob/master/WebContent/META-INF/persistence.xml) -** is a file presents into folder named META-INF  
 * **[build.xml](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/blob/master/build.xml) -** is an ant script which automates repetitive tasks directly from the command line.
 * **[ivy.xml](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/blob/master/ivy.xml) -** is a file which can specify the dependencies 
@@ -66,23 +65,8 @@ CREATE TABLE Measure (
 );
 ```
 
-### Client Repository
-* **[introsde.document.client](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/client) -**
-* **[introsde.document.wsimport](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/wsimport) -**
-* **[client-server-xml.log](https://github.com/yuly-sanchez/introsde-2015-assignment-2/blob/master/client-server-xml.log) -** is a log file of the client calling my server own using format XML format
 
-
-## Usage
-This project contains the `ant build script` to compile source code, run tests and generate documentation directly from the command line:
-```
- ant execute.client
-```
-This target calls the following targets defined in the build file:
-* `execute.client.myServer.xml` send all requests to my server with the body in XML format. This generate the ouput saved into [client-server-xml.log](https://github.com/yuly-sanchez/introsde-2015-assignment-2/blob/master/client-server-xml.log) file. 
-* `execute.client.myServer.json` send all requests to my server with the body in JSON format. This generate the ouput saved into [client-server-json.log](https://github.com/yuly-sanchez/introsde-2015-assignment-2/blob/master/client-server-json.log) file. 
-
-
-## Services through SOAP APIs
+## SOAP Request
 * **Method #1 :**  [readPersonList()](#readpersonlist)
 * **Method #2 :**  [readPerson(Long id)](#readpersonlong-id) 
 * **Method #3 :**  [updatePerson(Person p)](#updatepersonperson-p)
