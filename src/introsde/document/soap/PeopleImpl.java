@@ -28,16 +28,16 @@ public class PeopleImpl implements People {
 	 *  Returns the list all the people in the database
 	 */
 	@Override
-    public PeopleWrapper getPeople() {
+    public List<Person> getPeople() {
     	System.out.println("--> REQUEST: getPeople()");
     	
     	List<Person> people = Person.getAll();
     	for(Person p : people){
     		System.out.println(p.toString());
     	}
-    	PeopleWrapper pw = new PeopleWrapper();
-    	pw.setPeopleList(people);
-        return pw;
+    	//PeopleWrapper pw = new PeopleWrapper();
+    	//pw.setPeopleList(people);
+        return people;
     }
 	
 	/**
@@ -63,8 +63,15 @@ public class PeopleImpl implements People {
     @Override
     public Long updatePerson(Person person){
     	System.out.println("--> REQUEST: updatePerson(p)");
-    	
-        Person existing = Person.getPersonById(person.getIdPerson());
+    	Person existing = Person.getPersonById(person.getIdPerson());
+
+		if (existing != null) {
+			Person.updatePerson(person);
+			return new Long(0);
+		}else{
+			return new Long(-1);
+		}
+        /*Person existing = Person.getPersonById(person.getIdPerson());
         Long personId = 0L;
         if (existing == null) {
         	//the person is not found
@@ -88,7 +95,7 @@ public class PeopleImpl implements People {
             Person.updatePerson(person);
             personId = person.getIdPerson(); 
         }
-        return personId;
+        return personId;*/
     }
 
     /**
@@ -169,7 +176,7 @@ public class PeopleImpl implements People {
 	 * for Person identified by {id}
      */
 	@Override
-	public HealthHistoryWrapper getPersonHistory(Long id, String measureType) {
+	public List<Measure> getPersonHistory(Long id, String measureType) {
 		System.out.println("--> REQUEST: getPersonHistory("+ id + " , " + measureType + ")");
     	
 		Person target = Person.getPersonById(id);
@@ -177,9 +184,9 @@ public class PeopleImpl implements People {
     	for(Measure m : measureHistory){
     		System.out.println(m.toString());
     	}
-    	HealthHistoryWrapper hw = new HealthHistoryWrapper();
-    	hw.setHealthHistoryList(measureHistory);
-		return hw;
+    	//HealthHistoryWrapper hw = new HealthHistoryWrapper();
+    	//hw.setHealthHistoryList(measureHistory);
+		return measureHistory;
 	}
 
 	/**
@@ -189,16 +196,16 @@ public class PeopleImpl implements People {
 	@Override
 	@WebMethod(operationName="readMeasureTypes")
     @WebResult(name="measureTypes")
-    public MeasureTypesWrapper getMeasureTypes(){
+    public List<String> getMeasureTypes(){
 		System.out.println("--> REQUEST: getMeasureTypes()");
 		
 		List<String> measureTypes = Measure.getByMeasureTypes();
 		for(String m : measureTypes){
 			System.out.println(m.toString());
 		}
-		MeasureTypesWrapper mw = new MeasureTypesWrapper();
-		mw.setMeasureTypeList(measureTypes);
-		return mw;
+		//MeasureTypesWrapper mw = new MeasureTypesWrapper();
+		//mw.setMeasureTypeList(measureTypes);
+		return measureTypes;
 	}
 	
 	/**
@@ -302,6 +309,8 @@ public class PeopleImpl implements People {
 		
 		if(existing == null){
 			System.out.println("--> Update: MeasureType with " + idMeasure + " not found");
+			return new Long(-1);
+			
 		}else{
 			System.out.println("--> Update: MeasureType with " + idMeasure + " found");
 			
@@ -327,8 +336,8 @@ public class PeopleImpl implements People {
 					existing.setMeasureValue(measure.getMeasureValue());
 					Measure.updateMeasure(existing);
 				}
-			}	
+			}
+			return existing.getIdMeasure();
 		}
-		return existing.getIdMeasure();
 	}
 }
