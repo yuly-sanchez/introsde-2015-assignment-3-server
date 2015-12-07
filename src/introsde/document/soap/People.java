@@ -35,11 +35,11 @@ public interface People {
 
     @WebMethod(operationName="updatePerson")
     @WebResult(name="personId") 
-    public Long updateP(@WebParam(name="person") Person person);
+    public Long updatePerson(@WebParam(name="person") Person person);
     
     @WebMethod(operationName="createPerson")
     @WebResult(name="personId") 
-    public Long createP(@WebParam(name="person") Person person);
+    public Long createPerson(@WebParam(name="person") Person person);
 
     @WebMethod(operationName="deletePerson")
     @WebResult(name="message") 
