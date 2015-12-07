@@ -63,14 +63,16 @@ public class PeopleImpl implements People {
      * Update the personal information of the Person identified by {id} and return his/her personId
      */
     @Override
-    public Long updateP(Person person){
+    public Long updatePerson(Person person){
     	System.out.println("--> REQUEST: updatePerson(p)");
     	
         Person existing = Person.getPersonById(person.getIdPerson());
-
+        Long personId = 0L;
         if (existing == null) {
         	//the person is not found
         	System.out.println("---> id: "+ person.getIdPerson() + " not found!");
+        	personId = new Long(-1);
+        	
         } else {
         	person.setIdPerson(existing.getIdPerson());
             //checks if the client sent a name in order to update the person
@@ -85,9 +87,10 @@ public class PeopleImpl implements People {
             	person.setBirthdate(existing.getBirthdate());
             }
             person.setCurrentHealth(existing.getCurrentHealth());
-            Person.updatePerson(person); 
+            Person.updatePerson(person);
+            personId = person.getIdPerson(); 
         }
-        return person.getIdPerson();
+        return personId;
     }
 
     /**
@@ -96,7 +99,8 @@ public class PeopleImpl implements People {
      * (if a health profile is included, create also those measurements for the new Person)
      */
     @Override
-    public Long createP(Person person) {
+    public Long createPerson(Person person) {
+    	
         //checks if person includes currentMeasure, in other words a 'measure'
     	if(person.currentHealth == null){
     		System.out.println("REQUESTED: createPerson(" + person.getFirstname() + ") without measure");
@@ -114,7 +118,7 @@ public class PeopleImpl implements People {
     		
     		//saves the person in the database and retrieves his/her idPerson
     		Person p = Person.savePerson(person);
-    		Long personId = p.getIdPerson();
+    		//Long personId = p.getIdPerson();
     		
     		//create today date
 			Calendar calendar = Calendar.getInstance();
@@ -137,7 +141,7 @@ public class PeopleImpl implements People {
     			
     			Measure.saveMeasure(newMeasure);
     		}
-    		return personId;	
+    		return person.getIdPerson();	
     	}
 }
 
@@ -222,6 +226,7 @@ public class PeopleImpl implements People {
 	public Long savePersonMeasure(Long idPerson, Measure measure) {
 		System.out.println("--> REQUEST: savePersonMeasure("+ idPerson + " , " + measure.toString() + ")");
 		
+		Long measureId = 0L;
 		Measure target = null;
 		//set today date
 		Calendar calendar = Calendar.getInstance();
@@ -257,7 +262,8 @@ public class PeopleImpl implements People {
 				Measure.saveMeasure(newMeasure);
 				
 				System.out.println("--> measure added");
-				return newMeasure.getIdMeasure();
+				
+				measureId = newMeasure.getIdMeasure();
 			
 			}else{
 				target = new Measure();
@@ -274,10 +280,12 @@ public class PeopleImpl implements People {
 				Measure.saveMeasure(target);
 				
 				System.out.println("--> measure added");
-				return target.getIdMeasure();
+				measureId = target.getIdMeasure();
 			}
+			return measureId;
+		}else {
+			return new Long(-1);
 		}
-		else return new Long(-1);
 	}
 
 	/**
