@@ -35,11 +35,11 @@ public interface People {
 
     @WebMethod(operationName="updatePerson")
     @WebResult(name="personId") 
-    public Long updatePerson(@WebParam(name="person") Person person);
+    public Long updateP(@WebParam(name="person") Person person);
     
     @WebMethod(operationName="createPerson")
     @WebResult(name="personId") 
-    public Long createPerson(@WebParam(name="person") Person person);
+    public Long createP(@WebParam(name="person") Person person);
 
     @WebMethod(operationName="deletePerson")
     @WebResult(name="message") 
@@ -63,6 +63,6 @@ public interface People {
     
     @WebMethod(operationName="updatePersonMeasure")
     @WebResult(name="mid")
-    public Long updatePersonMeasure(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure, @WebParam(name="mid") Long idMeasure);
+    public Long updatePersonM(@WebParam(name="personId") Long idPerson, @WebParam(name="measure") Measure measure, @WebParam(name="mid") Long idMeasure);
     
 }
