@@ -63,8 +63,9 @@ public class PeopleImpl implements People {
      * Update the personal information of the Person identified by {id} and return his/her personId
      */
     @Override
-    public Long updatePerson(Person person){
+    public Long updateP(Person person){
     	System.out.println("--> REQUEST: updatePerson(p)");
+    	
         Person existing = Person.getPersonById(person.getIdPerson());
 
         if (existing == null) {
@@ -95,7 +96,7 @@ public class PeopleImpl implements People {
      * (if a health profile is included, create also those measurements for the new Person)
      */
     @Override
-    public Long createPerson(Person person) {
+    public Long createP(Person person) {
         //checks if person includes currentMeasure, in other words a 'measure'
     	if(person.currentHealth == null){
     		System.out.println("REQUESTED: createPerson(" + person.getFirstname() + ") without measure");
@@ -285,7 +286,7 @@ public class PeopleImpl implements People {
 	 * and return the mid associated to the measure updated 
 	 */
 	@Override
-	public Long updatePersonMeasure(Long idPerson, Measure measure, Long idMeasure) {
+	public Long updatePersonM(Long idPerson, Measure measure, Long idMeasure) {
 		System.out.println("--> REQUEST: updatePersonMeasure("+ idPerson + " , " + measure.toString() + " , " + idMeasure + ")");
 		
 		Measure existing = Measure.getMeasureById(idMeasure);
