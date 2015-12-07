@@ -5,9 +5,6 @@ import java.util.List;
 
 import introsde.document.model.Measure;
 import introsde.document.model.Person;
-import introsde.document.wrapper.HealthHistoryWrapper;
-import introsde.document.wrapper.MeasureTypesWrapper;
-import introsde.document.wrapper.PeopleWrapper;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
