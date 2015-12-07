@@ -11,6 +11,13 @@ I don't work in pairs, then I implemented my client for my own server and saved 
 * Client Repository GitHub: [Webpage](https://github.com/yuly-sanchez/introsde-2015-assignment-3-client)
 
 
+## Usage
+This project contains the `ant build script` to compile source code, run tests and generate documentation directly from the command line. To run the server local:
+```
+ ant start
+```
+
+
 ## Project Structure
 
 * **[introsde.document.endpoint](https://github.com/yuly-sanchez/introsde-2015-assignment-3-server/tree/master/src/introsde/document/endpoint) -** will contain the class PeoplePublisher.java that is the stand alone server
